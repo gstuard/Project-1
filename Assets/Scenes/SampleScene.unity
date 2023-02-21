@@ -156,7 +156,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 3
-  friction: 1
+  friction: 5
 --- !u!50 &413333867
 Rigidbody2D:
   serializedVersion: 4

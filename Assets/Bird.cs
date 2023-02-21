@@ -23,13 +23,15 @@ public class Bird : MonoBehaviour
         {
             rb.velocity = new Vector2(- speed, rb.velocity.y);
         }
-        else if (Input.GetKey(KeyCode.D))
+        if (Input.GetKey(KeyCode.D))
         {
             rb.velocity = new Vector2(speed, rb.velocity.y);
         }
-        else
+
+        if (!Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D))
         {
-            rb.velocity = new Vector2(rb.velocity.x - (Time.deltaTime * friction), rb.velocity.y);
+            // friction is now unused, would be used here
+            rb.velocity = new Vector2(0, rb.velocity.y);
         }
     }
 }
