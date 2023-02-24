@@ -62,17 +62,29 @@ public class Bird : MonoBehaviour
 
     bool IsGrounded() // make this bigger/add more rays
     {
-        float distToGround = GetComponent<CapsuleCollider2D>().bounds.extents.y + 0.1f;
+        float distToGround = GetComponent<CapsuleCollider2D>().bounds.extents.y + 0.05f;
         Vector3 ray_start = new Vector3(transform.position.x, transform.position.y - distToGround, transform.position.z);
-        RaycastHit2D floorHit = Physics2D.Raycast(ray_start, Vector2.down, 0.05f);
+        RaycastHit2D floorHit = Physics2D.Raycast(ray_start, Vector2.down, 0.05f); // should debug.ray this to make sure
         return floorHit.collider != null;
     }
 
 
     void Jump() // make bird slightly faster in the air?
     {
-        if (current_jump_height > rb.velocity.y || flight_timer > 0)
+        if (flying && IsGrounded()) // this happens when the raycast has connected but there hasnt been a collision
         {
+            Debug.Log("Tech!!");
+            rb.velocity = new Vector2(rb.velocity.x * 2, jump_height * 1.4f);
+            speed *= 2f; // to do: speed magnifier var
+
+            current_jump_height = jump_height;
+            jump_timer = 0.1f; // this is vesgtigious
+            flying = false;
+            flight_timer = 0.9f;
+        }
+        else if (current_jump_height > rb.velocity.y || flight_timer > 0)
+        {
+            Debug.Log(flight_timer);
             rb.velocity = new Vector2(rb.velocity.x, current_jump_height);
             current_jump_height -= jump_height / 3;
             jump_timer = 0.1f; // this is vesgtigious
@@ -89,11 +101,8 @@ public class Bird : MonoBehaviour
             jump_timer -= Time.deltaTime;
         }
         if (IsGrounded())
-        {
-            if (jump_timer <= 0)
-            {
-                current_jump_height = jump_height;
-            }
+        { 
+            current_jump_height = jump_height;
             jump_timer = 0;
             flight_timer = .9f;
         }
@@ -191,7 +200,7 @@ public class Bird : MonoBehaviour
             Fly();
         }
 
-        if (flight_timer > 0 && flying)
+        if (flying) // CHANGED
         {
             flight_timer -= Time.deltaTime;
 
@@ -208,7 +217,7 @@ public class Bird : MonoBehaviour
         } else 
         {
             rb.gravityScale = 2f;
-            speed = original_speed; // add a slow down mechanic/keep speed for a sec
+            //speed = original_speed; // add a slow down mechanic/keep speed for a sec
             sr.color = Color.blue;
         }
 
@@ -228,12 +237,23 @@ public class Bird : MonoBehaviour
     }
 
 
+    void PhysUpdate()
+    {
+        if (speed > original_speed && !flying)
+        {
+            speed -= Time.deltaTime * air_friction;
+        }
+        // to do grounded timer
+    }
+
+
     // Update is called once per frame
     void Update()
     {
         JumpUpdate();
         FlyUpdate(); // can change this so its only called on second else, 3rd cond. below
         LifeUpdate();
+        PhysUpdate();
 
         if (IsGrounded())
         {
