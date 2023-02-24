@@ -13,6 +13,7 @@ public class Bird : MonoBehaviour
     internal float speed;
     internal float current_jump_height;
     internal float flight_timer = 0;
+    internal bool flying = false;
     internal float flight_angle = 0; // add gravity speed boost later
     internal float jump_timer = 0;
 
@@ -70,12 +71,13 @@ public class Bird : MonoBehaviour
 
     void Jump() // make bird slightly faster in the air?
     {
-        if (current_jump_height > rb.velocity.y)
+        if (current_jump_height > rb.velocity.y || flight_timer > 0)
         {
             rb.velocity = new Vector2(rb.velocity.x, current_jump_height);
             current_jump_height -= jump_height / 3;
             jump_timer = 0.1f; // this is vesgtigious
             //speed *= 9 / 8;
+            flying = false;
         }
     }
 
@@ -93,6 +95,7 @@ public class Bird : MonoBehaviour
                 current_jump_height = jump_height;
             }
             jump_timer = 0;
+            flight_timer = .9f;
         }
         if (Input.GetKeyDown(KeyCode.C))
         {
@@ -166,23 +169,29 @@ public class Bird : MonoBehaviour
     }
 
 
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        flight_timer = 0;
+    }
+
+
     void Fly()
     {
+        flying = true;
         rb.gravityScale = 0f;
-        speed = original_speed * 1.525f;
-        flight_timer = .9f;
+        speed = original_speed * 1.425f;
         sr.color = Color.red;
     }
 
 
     void FlyUpdate()
     {
-        if (Input.GetKeyDown(KeyCode.X))
+        if (Input.GetKeyDown(KeyCode.X) && flight_timer > 0)
         {
             Fly();
         }
 
-        if (flight_timer > 0)
+        if (flight_timer > 0 && flying)
         {
             flight_timer -= Time.deltaTime;
 
@@ -190,7 +199,7 @@ public class Bird : MonoBehaviour
 
             if (input_vector != Vector2.zero)
             {
-                Vector2 flight_vel = Vector2.Lerp(rb.velocity.normalized, input_vector, 0.3f);
+                Vector2 flight_vel = Vector2.Lerp(rb.velocity.normalized, input_vector, 0.035f);
                 rb.velocity = flight_vel;
             }
 
@@ -202,20 +211,35 @@ public class Bird : MonoBehaviour
             speed = original_speed; // add a slow down mechanic/keep speed for a sec
             sr.color = Color.blue;
         }
+
+        if (flight_timer <= 0)
+        {
+            flying = false;
+        }
+    }
+
+
+    void LifeUpdate()
+    {
+        if (transform.position.y < -20f)
+        {
+            transform.position = new Vector3(-3, -1, 0);
+        }
     }
 
 
     // Update is called once per frame
     void Update()
     {
-        FlyUpdate();
         JumpUpdate();
+        FlyUpdate(); // can change this so its only called on second else, 3rd cond. below
+        LifeUpdate();
 
         if (IsGrounded())
         {
             GroundMove();
         }
-        else if (flight_timer <= 0)
+        else if (!flying)
         {
             AirMove();
         }
