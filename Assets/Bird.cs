@@ -12,10 +12,12 @@ public class Bird : MonoBehaviour
 
     internal float speed;
     internal float current_jump_height;
-    internal float flight_timer = 0;
-    internal bool flying = false;
-    internal float flight_angle = 0; // add gravity speed boost later
     internal float jump_timer = 0;
+    internal float flight_timer = 0;
+    internal float flight_angle = 0; // add gravity speed boost later
+    internal bool flying = false;
+    internal float move_lock = 0f;
+    //internal bool move_lock = false;
 
     internal float fall_speed;
     internal float normal_fall_speed = 10;
@@ -69,6 +71,23 @@ public class Bird : MonoBehaviour
     }
 
 
+    bool IsOnRightWall()
+    {
+        float distToWall = GetComponent<CapsuleCollider2D>().bounds.extents.x + 0.05f;
+        Vector3 ray_start = new Vector3(transform.position.x + distToWall, transform.position.y, transform.position.z);
+        RaycastHit2D wallHit = Physics2D.Raycast(ray_start, Vector2.right, 0.05f); // should debug.ray this to make sure
+        return wallHit.collider != null;
+    }
+
+    bool IsOnLeftWall() // consolidate to is on wall?
+    {
+        float distToWall = GetComponent<CapsuleCollider2D>().bounds.extents.x + 0.05f;
+        Vector3 ray_start = new Vector3(transform.position.x - distToWall, transform.position.y, transform.position.z);
+        RaycastHit2D wallHit = Physics2D.Raycast(ray_start, Vector2.left, 0.05f); // should debug.ray this to make sure
+        return wallHit.collider != null;
+    }
+
+
     void Jump() // make bird slightly faster in the air?
     {
         if (flying && IsGrounded()) // this happens when the raycast has connected but there hasnt been a collision
@@ -84,13 +103,30 @@ public class Bird : MonoBehaviour
         }
         else if (current_jump_height > rb.velocity.y || flight_timer > 0)
         {
-            Debug.Log(flight_timer);
             rb.velocity = new Vector2(rb.velocity.x, current_jump_height);
             current_jump_height -= jump_height / 3;
             jump_timer = 0.1f; // this is vesgtigious
             //speed *= 9 / 8;
             flying = false;
         }
+    }
+
+
+    void WallJump()
+    {
+        float x_vel = 0;
+        speed *= 1.1f;
+        if (IsOnRightWall())
+        {
+            x_vel = -speed;
+        }
+        else x_vel = speed; // if on left wall
+
+        move_lock = 0.1f;
+        rb.velocity = new Vector2(x_vel, current_jump_height);
+        current_jump_height -= jump_height / 3;
+        jump_timer = 0.1f;
+        flying = false;
     }
 
 
@@ -108,7 +144,11 @@ public class Bird : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.C))
         {
-            Jump();
+            if (!IsOnLeftWall() && !IsOnRightWall())
+            {
+                Jump();
+            }
+            else WallJump();
         }
     }
 
@@ -131,7 +171,32 @@ public class Bird : MonoBehaviour
         }
     }
 
-     
+
+    void WallCling()
+    {
+        if (IsOnRightWall())
+        {
+            current_jump_height = jump_height;
+            speed = original_speed;
+            //rb.velocity = new Vector2(0, rb.velocity.y); // do i need this?
+            if (Input.GetKey(KeyCode.RightArrow))
+            {
+                fall_speed = 2f;
+            }
+        }
+        if (IsOnLeftWall())
+        {
+            current_jump_height = jump_height;
+            speed = original_speed;
+            //rb.velocity = new Vector2(0, rb.velocity.y); // do i need this?
+            if (Input.GetKey(KeyCode.LeftArrow))
+            {
+                fall_speed = 2f;
+            }
+        }
+    }
+
+
     void FastFall()
     {
         if (Input.GetKey(KeyCode.DownArrow) && rb.velocity.y < 0)
@@ -144,37 +209,44 @@ public class Bird : MonoBehaviour
             fall_speed = normal_fall_speed;
             rb.gravityScale = normal_gravity;
         }
+
+        WallCling();
+
         rb.velocity = new Vector2(rb.velocity.x, Mathf.Max(rb.velocity.y, -fall_speed));
     }
 
 
     void AirMove()
     {
-        if (Input.GetKey(KeyCode.LeftArrow))
+        if (move_lock <= 0)
         {
-            float x_vel = Mathf.Max(-speed, rb.velocity.x - Time.deltaTime * air_friction);
-            rb.velocity = new Vector2(x_vel, rb.velocity.y);
-        }
-        if (Input.GetKey(KeyCode.RightArrow))
-        {
-            float x_vel = Mathf.Min(speed, rb.velocity.x + Time.deltaTime * air_friction);
-            rb.velocity = new Vector2(x_vel, rb.velocity.y);
-        }
-        if (!Input.GetKey(KeyCode.LeftArrow) && !Input.GetKey(KeyCode.RightArrow))
-        {
-            if (rb.velocity.x > 0)
+            if (Input.GetKey(KeyCode.LeftArrow))
             {
-                float x_vel = Mathf.Max(0, rb.velocity.x - Time.deltaTime * air_friction / 3);
+                float x_vel = Mathf.Max(-speed, rb.velocity.x - Time.deltaTime * air_friction);
                 rb.velocity = new Vector2(x_vel, rb.velocity.y);
             }
-            else if (rb.velocity.x < 0)
+            if (Input.GetKey(KeyCode.RightArrow))
             {
-                float x_vel = Mathf.Min(0, rb.velocity.x + Time.deltaTime * air_friction / 3);
+                float x_vel = Mathf.Min(speed, rb.velocity.x + Time.deltaTime * air_friction);
                 rb.velocity = new Vector2(x_vel, rb.velocity.y);
             }
-        }
+            if (!Input.GetKey(KeyCode.LeftArrow) && !Input.GetKey(KeyCode.RightArrow))
+            {
+                if (rb.velocity.x > 0)
+                {
+                    float x_vel = Mathf.Max(0, rb.velocity.x - Time.deltaTime * air_friction / 3);
+                    rb.velocity = new Vector2(x_vel, rb.velocity.y);
+                }
+                else if (rb.velocity.x < 0)
+                {
+                    float x_vel = Mathf.Min(0, rb.velocity.x + Time.deltaTime * air_friction / 3);
+                    rb.velocity = new Vector2(x_vel, rb.velocity.y);
+                }
+            }
 
-        FastFall();
+            FastFall();
+        }
+        else move_lock -= Time.deltaTime;
     }
 
 
@@ -244,6 +316,8 @@ public class Bird : MonoBehaviour
             speed -= Time.deltaTime * air_friction;
         }
         // to do grounded timer
+
+        
     }
 
 
