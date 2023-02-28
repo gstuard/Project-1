@@ -25,6 +25,8 @@ public class Bird : MonoBehaviour
     internal float normal_gravity = 2.25f;
     internal float fast_gravity = 5.5f;
 
+    public Vector3 respawn = new Vector3(-1, -3, 0);
+
     internal Rigidbody2D rb;
     internal SpriteRenderer sr;
 
@@ -36,6 +38,20 @@ public class Bird : MonoBehaviour
         current_jump_height = jump_height;
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
+    }
+
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        flight_timer = 0; // end flight, add if statement to this for crystals soon probably
+
+        if (collision.gameObject.CompareTag("Respawn")) // should we be using area effector?
+        {
+            Debug.Log("Respawn set");
+            respawn = collision.gameObject.transform.position;
+            respawn = new Vector3(respawn.x, respawn.y + 1, respawn.z);
+            Debug.Log(respawn);
+        }
     }
 
 
@@ -90,6 +106,7 @@ public class Bird : MonoBehaviour
 
     void Jump() // make bird slightly faster in the air?
     {
+        Debug.Log("Jump Call");
         if (flying && IsGrounded()) // this happens when the raycast has connected but there hasnt been a collision
         {
             Debug.Log("Tech!!");
@@ -97,15 +114,18 @@ public class Bird : MonoBehaviour
             speed *= 2f; // to do: speed magnifier var
 
             current_jump_height = jump_height;
-            jump_timer = 0.1f; // this is vesgtigious
             flying = false;
             flight_timer = 0.9f;
         }
         else if (current_jump_height > rb.velocity.y || flight_timer > 0)
         {
-            rb.velocity = new Vector2(rb.velocity.x, current_jump_height);
+            if (jump_timer < 0.05f && IsGrounded())
+            {
+                Debug.Log("Shorthop");
+                rb.velocity = new Vector2(rb.velocity.x, (3/4) * current_jump_height);
+            }
+            else rb.velocity = new Vector2(rb.velocity.x, current_jump_height);
             current_jump_height -= jump_height / 3;
-            jump_timer = 0.1f; // this is vesgtigious
             //speed *= 9 / 8;
             flying = false;
         }
@@ -114,6 +134,7 @@ public class Bird : MonoBehaviour
 
     void WallJump()
     {
+        Debug.Log("Walljump Call");
         float x_vel = 0;
         speed *= 1.1f;
         if (IsOnRightWall())
@@ -125,31 +146,41 @@ public class Bird : MonoBehaviour
         move_lock = 0.1f;
         rb.velocity = new Vector2(x_vel, current_jump_height);
         current_jump_height -= jump_height / 3;
-        jump_timer = 0.1f;
         flying = false;
     }
 
 
     void JumpUpdate()
     {
-        if (jump_timer > 0)
-        {
-            jump_timer -= Time.deltaTime;
-        }
         if (IsGrounded())
-        { 
+        {
             current_jump_height = jump_height;
-            jump_timer = 0;
             flight_timer = .9f;
+            if (Input.GetKey(KeyCode.C))
+            {
+                jump_timer += Time.deltaTime;
+            }
+            else jump_timer = 0;
+
+            if (jump_timer > 0.05f || Input.GetKeyUp(KeyCode.C))
+            {
+                Jump();
+                jump_timer = 0;
+                return;
+            }
         }
-        if (Input.GetKeyDown(KeyCode.C))
+
+        else if (Input.GetKeyDown(KeyCode.C))
         {
             if (!IsOnLeftWall() && !IsOnRightWall())
             {
                 Jump();
             }
-            else WallJump();
-        }
+            else
+            {
+                WallJump();
+            }
+        }      
     }
 
 
@@ -250,12 +281,6 @@ public class Bird : MonoBehaviour
     }
 
 
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        flight_timer = 0;
-    }
-
-
     void Fly()
     {
         flying = true;
@@ -302,9 +327,14 @@ public class Bird : MonoBehaviour
 
     void LifeUpdate()
     {
-        if (transform.position.y < -20f)
+        //if (transform.position.y < -20f)
+        //{
+        //    transform.position = respawn;
+        //}
+
+        if (Input.GetKey(KeyCode.R))
         {
-            transform.position = new Vector3(-3, -1, 0);
+            transform.position = respawn;
         }
     }
 
