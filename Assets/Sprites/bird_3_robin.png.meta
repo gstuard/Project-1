@@ -33,7 +33,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -42,7 +42,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -115,7 +115,511 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: bird_3_robin_0
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 227
+        width: 20
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c6497fd919f9e45c5ae78b9767a2710b
+      internalID: -917379254
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bird_3_robin_1
+      rect:
+        serializedVersion: 2
+        x: 37
+        y: 233
+        width: 21
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 74376ed0218e3413da04ba58247d4aaf
+      internalID: -1010765510
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bird_3_robin_2
+      rect:
+        serializedVersion: 2
+        x: 69
+        y: 233
+        width: 20
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0c75f7aff839a43f49ab81e2de7f214e
+      internalID: 1184411974
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bird_3_robin_3
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 200
+        width: 17
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 69b6bc2379dde490c9075228a69ad7d6
+      internalID: 1455865023
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bird_3_robin_4
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 201
+        width: 25
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7eae13604887248c3a3a84d0c939213c
+      internalID: -1149973044
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bird_3_robin_5
+      rect:
+        serializedVersion: 2
+        x: 71
+        y: 201
+        width: 19
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 424c4b8f94070485ba1bf6494423ceb5
+      internalID: -1145356562
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bird_3_robin_6
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 168
+        width: 17
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2a823bfc918404ec4a82cc1b320f8360
+      internalID: 1365989668
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bird_3_robin_7
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 169
+        width: 25
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8cb26aab7249c4cf38125c983faf213e
+      internalID: 1552769075
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bird_3_robin_8
+      rect:
+        serializedVersion: 2
+        x: 71
+        y: 169
+        width: 19
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0d4ab5835f35d4f8494e0bcd21562a2f
+      internalID: -14347741
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bird_3_robin_9
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 137
+        width: 20
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3a19c34ff97d349a792accbe70500f8c
+      internalID: 274946980
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bird_3_robin_10
+      rect:
+        serializedVersion: 2
+        x: 38
+        y: 137
+        width: 21
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9d8e6b2d984d24a2fa4389a8d5d10c74
+      internalID: -1664287670
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bird_3_robin_11
+      rect:
+        serializedVersion: 2
+        x: 71
+        y: 131
+        width: 20
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8c65236efea4248b382fb45966b31c94
+      internalID: -365283746
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bird_3_robin_12
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 103
+        width: 21
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8f9a614d9a60249cd868797462d6d4d9
+      internalID: 399887510
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bird_3_robin_13
+      rect:
+        serializedVersion: 2
+        x: 39
+        y: 103
+        width: 20
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b6d421a97cc9b4fcab6f0de0c7195211
+      internalID: -1683469450
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bird_3_robin_14
+      rect:
+        serializedVersion: 2
+        x: 72
+        y: 103
+        width: 19
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f36d54ad0455e4e6ca6987c805b6c8c0
+      internalID: 1519841775
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bird_3_robin_15
+      rect:
+        serializedVersion: 2
+        x: 9
+        y: 67
+        width: 13
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a409d3b16fe1f41c399c7119b64f4e2c
+      internalID: 1442902560
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bird_3_robin_16
+      rect:
+        serializedVersion: 2
+        x: 41
+        y: 68
+        width: 13
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4b935e85ebb524e4ab86267c6bd8151f
+      internalID: -354638850
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bird_3_robin_17
+      rect:
+        serializedVersion: 2
+        x: 74
+        y: 67
+        width: 13
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e07992a5bd2dd432b8002ed5326cf5e3
+      internalID: 96372409
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bird_3_robin_18
+      rect:
+        serializedVersion: 2
+        x: 10
+        y: 39
+        width: 13
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 533662832a57443fc865def7bbc536cb
+      internalID: -1683476732
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bird_3_robin_19
+      rect:
+        serializedVersion: 2
+        x: 42
+        y: 40
+        width: 13
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8aeacd875f6d54d47b6d6bd3046a95b3
+      internalID: 898736086
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bird_3_robin_20
+      rect:
+        serializedVersion: 2
+        x: 74
+        y: 39
+        width: 13
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: da96ef11cc6624105a172aacba910a61
+      internalID: 1519435839
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bird_3_robin_21
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 7
+        width: 19
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dfe17b51dd7184f30ad827a2f3176555
+      internalID: 2144467515
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bird_3_robin_22
+      rect:
+        serializedVersion: 2
+        x: 37
+        y: 7
+        width: 20
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 13af3db090439428b965dcd3ac1b7456
+      internalID: -1338932807
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bird_3_robin_23
+      rect:
+        serializedVersion: 2
+        x: 69
+        y: 7
+        width: 21
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c356728c8599f4564a8580f4ffcf8fa3
+      internalID: 496304287
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -126,7 +630,31 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      bird_3_robin_5: -1145356562
+      bird_3_robin_17: 96372409
+      bird_3_robin_10: -1664287670
+      bird_3_robin_7: 1552769075
+      bird_3_robin_1: -1010765510
+      bird_3_robin_9: 274946980
+      bird_3_robin_13: -1683469450
+      bird_3_robin_11: -365283746
+      bird_3_robin_22: -1338932807
+      bird_3_robin_14: 1519841775
+      bird_3_robin_6: 1365989668
+      bird_3_robin_12: 399887510
+      bird_3_robin_20: 1519435839
+      bird_3_robin_0: -917379254
+      bird_3_robin_19: 898736086
+      bird_3_robin_23: 496304287
+      bird_3_robin_15: 1442902560
+      bird_3_robin_16: -354638850
+      bird_3_robin_18: -1683476732
+      bird_3_robin_3: 1455865023
+      bird_3_robin_21: 2144467515
+      bird_3_robin_8: -14347741
+      bird_3_robin_2: 1184411974
+      bird_3_robin_4: -1149973044
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0
