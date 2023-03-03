@@ -122,7 +122,7 @@ public class Bird : MonoBehaviour
             if (jump_timer < 0.05f && IsGrounded())
             {
                 Debug.Log("Shorthop");
-                rb.velocity = new Vector2(rb.velocity.x, (3/4) * current_jump_height);
+                rb.velocity = new Vector2(rb.velocity.x, (3 / 4) * current_jump_height);
             }
             else rb.velocity = new Vector2(rb.velocity.x, current_jump_height);
             current_jump_height -= jump_height / 3;
@@ -180,7 +180,7 @@ public class Bird : MonoBehaviour
             {
                 WallJump();
             }
-        }      
+        }
     }
 
 
@@ -311,7 +311,8 @@ public class Bird : MonoBehaviour
 
             rb.velocity = rb.velocity.normalized;
             rb.velocity *= speed;
-        } else 
+        }
+        else
         {
             rb.gravityScale = 2f;
             //speed = original_speed; // add a slow down mechanic/keep speed for a sec
@@ -347,7 +348,7 @@ public class Bird : MonoBehaviour
         }
         // to do grounded timer
 
-        
+
     }
 
 
