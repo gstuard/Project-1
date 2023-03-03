@@ -8,11 +8,16 @@ public class Bird : MonoBehaviour
     public float original_speed;
     public float friction; // vestigial
     public float air_friction; // 1 is VERY low, 10 is avg, 20 is good
+
+
     public float jump_height;
+    public float[] jump_heights;
+    internal int jump_index = 0;
+    internal float jump_timer = 0;
+
+    public LayerMask birdlayer;
 
     internal float speed;
-    internal float current_jump_height;
-    internal float jump_timer = 0;
     internal float flight_timer = 0;
     internal float flight_angle = 0; // add gravity speed boost later
     internal bool flying = false;
@@ -35,7 +40,6 @@ public class Bird : MonoBehaviour
     {
         fall_speed = normal_fall_speed;
         speed = original_speed;
-        current_jump_height = jump_height;
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
     }
@@ -43,14 +47,13 @@ public class Bird : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        flight_timer = 0; // end flight, add if statement to this for crystals soon probably
+        flying = false; // end flight, add if statement to this for crystals soon probably
 
         if (collision.gameObject.CompareTag("Respawn")) // should we be using area effector?
         {
             Debug.Log("Respawn set");
             respawn = collision.gameObject.transform.position;
             respawn = new Vector3(respawn.x, respawn.y + 1, respawn.z);
-            Debug.Log(respawn);
         }
     }
 
@@ -80,62 +83,51 @@ public class Bird : MonoBehaviour
 
     bool IsGrounded() // make this bigger/add more rays
     {
-        float distToGround = GetComponent<CapsuleCollider2D>().bounds.extents.y + 0.05f;
+        float distToGround = GetComponent<CapsuleCollider2D>().bounds.extents.y - 0.05f;
         Vector3 ray_start = new Vector3(transform.position.x, transform.position.y - distToGround, transform.position.z);
-        RaycastHit2D floorHit = Physics2D.Raycast(ray_start, Vector2.down, 0.05f); // should debug.ray this to make sure
+        RaycastHit2D floorHit = Physics2D.Raycast(ray_start, Vector2.down, 0.1f, birdlayer); 
         return floorHit.collider != null;
     }
 
 
-    bool IsOnRightWall()
-    {
-        float distToWall = GetComponent<CapsuleCollider2D>().bounds.extents.x + 0.05f;
-        Vector3 ray_start = new Vector3(transform.position.x + distToWall, transform.position.y, transform.position.z);
-        RaycastHit2D wallHit = Physics2D.Raycast(ray_start, Vector2.right, 0.05f); // should debug.ray this to make sure
-        return wallHit.collider != null;
-    }
-
-    bool IsOnLeftWall() // consolidate to is on wall?
+    bool IsOnLeftWall()
     {
         float distToWall = GetComponent<CapsuleCollider2D>().bounds.extents.x + 0.05f;
         Vector3 ray_start = new Vector3(transform.position.x - distToWall, transform.position.y, transform.position.z);
-        RaycastHit2D wallHit = Physics2D.Raycast(ray_start, Vector2.left, 0.05f); // should debug.ray this to make sure
+        RaycastHit2D wallHit = Physics2D.Raycast(ray_start, Vector2.right, 0.1f, birdlayer);
+        return wallHit.collider != null;
+    }
+
+    bool IsOnRightWall() // consolidate to is on wall?
+    {
+        float distToWall = GetComponent<CapsuleCollider2D>().bounds.extents.x + 0.05f;
+        Vector3 ray_start = new Vector3(transform.position.x + distToWall, transform.position.y, transform.position.z);
+        RaycastHit2D wallHit = Physics2D.Raycast(ray_start, Vector2.left, 0.1f, birdlayer);
         return wallHit.collider != null;
     }
 
 
     void Jump() // make bird slightly faster in the air?
     {
-        Debug.Log("Jump Call");
-        if (flying && IsGrounded()) // this happens when the raycast has connected but there hasnt been a collision
+        if (flying) // this happens when the raycast has connected but there hasnt been a collision
         {
-            Debug.Log("Tech!!");
             rb.velocity = new Vector2(rb.velocity.x * 2, jump_height * 1.4f);
             speed *= 2f; // to do: speed magnifier var
 
-            current_jump_height = jump_height;
             flying = false;
-            flight_timer = 0.9f;
+            flight_timer = 1f;
         }
-        else if (current_jump_height > rb.velocity.y || flight_timer > 0)
+        else if (jump_height > rb.velocity.y)
         {
-            if (jump_timer < 0.05f && IsGrounded())
-            {
-                Debug.Log("Shorthop");
-                rb.velocity = new Vector2(rb.velocity.x, (3/4) * current_jump_height);
-            }
-            else rb.velocity = new Vector2(rb.velocity.x, current_jump_height);
-            current_jump_height -= jump_height / 3;
+            rb.velocity = new Vector2(rb.velocity.x, jump_height);
             //speed *= 9 / 8;
-            flying = false;
         }
     }
 
 
     void WallJump()
     {
-        Debug.Log("Walljump Call");
-        float x_vel = 0;
+        float x_vel;
         speed *= 1.1f;
         if (IsOnRightWall())
         {
@@ -143,10 +135,33 @@ public class Bird : MonoBehaviour
         }
         else x_vel = speed; // if on left wall
 
-        move_lock = 0.1f;
-        rb.velocity = new Vector2(x_vel, current_jump_height);
-        current_jump_height -= jump_height / 3;
-        flying = false;
+        move_lock = 0.08f;
+        rb.velocity = new Vector2(x_vel, jump_height * .75f); // how high should wall jump be?
+    }
+
+
+    void AirJump()
+    {
+        if (jump_index < jump_heights.Length)
+        {
+            if (flying)
+            {
+                flying = false;
+                rb.velocity = new Vector2(rb.velocity.x, Mathf.Max(0, rb.velocity.y) / 2 + jump_heights[jump_index]);
+                jump_index++;
+            }
+            else if (jump_heights[jump_index] > rb.velocity.y)
+            {
+                rb.velocity = new Vector2(rb.velocity.x, jump_heights[jump_index]);
+                jump_index++;
+            }
+        }
+    }
+
+
+    void ShortHop()
+    {
+        rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y / 3);
     }
 
 
@@ -154,19 +169,23 @@ public class Bird : MonoBehaviour
     {
         if (IsGrounded())
         {
-            current_jump_height = jump_height;
+            jump_index = 0;
             flight_timer = .9f;
-            if (Input.GetKey(KeyCode.C))
+            if (Input.GetKeyDown(KeyCode.C))
             {
-                jump_timer += Time.deltaTime;
-            }
-            else jump_timer = 0;
-
-            if (jump_timer > 0.05f || Input.GetKeyUp(KeyCode.C))
-            {
+                jump_timer = 0.1f;
                 Jump();
-                jump_timer = 0;
-                return;
+            }
+        }
+        if (jump_timer > 0)
+        {
+            jump_timer -= Time.deltaTime;
+            if (jump_timer <= 0)
+            {
+                if (!Input.GetKey(KeyCode.C))
+                {
+                    ShortHop();
+                }
             }
         }
 
@@ -174,7 +193,7 @@ public class Bird : MonoBehaviour
         {
             if (!IsOnLeftWall() && !IsOnRightWall())
             {
-                Jump();
+                AirJump();
             }
             else
             {
@@ -207,9 +226,7 @@ public class Bird : MonoBehaviour
     {
         if (IsOnRightWall())
         {
-            current_jump_height = jump_height;
             speed = original_speed;
-            //rb.velocity = new Vector2(0, rb.velocity.y); // do i need this?
             if (Input.GetKey(KeyCode.RightArrow))
             {
                 fall_speed = 2f;
@@ -217,9 +234,7 @@ public class Bird : MonoBehaviour
         }
         if (IsOnLeftWall())
         {
-            current_jump_height = jump_height;
             speed = original_speed;
-            //rb.velocity = new Vector2(0, rb.velocity.y); // do i need this?
             if (Input.GetKey(KeyCode.LeftArrow))
             {
                 fall_speed = 2f;
@@ -242,7 +257,6 @@ public class Bird : MonoBehaviour
         }
 
         WallCling();
-
         rb.velocity = new Vector2(rb.velocity.x, Mathf.Max(rb.velocity.y, -fall_speed));
     }
 
@@ -285,19 +299,25 @@ public class Bird : MonoBehaviour
     {
         flying = true;
         rb.gravityScale = 0f;
-        speed = original_speed * 1.425f;
+        speed = original_speed * 1.525f;
         sr.color = Color.red;
+
+        Vector2 input_vector = GetInputVector();
+        if (input_vector != Vector2.zero)
+        {
+            rb.velocity = input_vector;
+        }
     }
 
 
     void FlyUpdate()
     {
-        if (Input.GetKeyDown(KeyCode.X) && flight_timer > 0)
+        if (Input.GetKeyDown(KeyCode.X) && flight_timer > 0 && !flying)
         {
             Fly();
         }
 
-        if (flying) // CHANGED
+        if (flying) 
         {
             flight_timer -= Time.deltaTime;
 
@@ -305,7 +325,7 @@ public class Bird : MonoBehaviour
 
             if (input_vector != Vector2.zero)
             {
-                Vector2 flight_vel = Vector2.Lerp(rb.velocity.normalized, input_vector, 0.035f);
+                Vector2 flight_vel = Vector2.Lerp(rb.velocity.normalized, input_vector, .195f);
                 rb.velocity = flight_vel;
             }
 
@@ -313,8 +333,7 @@ public class Bird : MonoBehaviour
             rb.velocity *= speed;
         } else 
         {
-            rb.gravityScale = 2f;
-            //speed = original_speed; // add a slow down mechanic/keep speed for a sec
+            rb.gravityScale = normal_gravity;
             sr.color = Color.blue;
         }
 
@@ -344,6 +363,10 @@ public class Bird : MonoBehaviour
         if (speed > original_speed && !flying)
         {
             speed -= Time.deltaTime * air_friction;
+        }
+        if (speed < original_speed)
+        {
+            speed = original_speed; // this removes slowness...
         }
         // to do grounded timer
 
