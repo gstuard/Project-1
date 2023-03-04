@@ -141,7 +141,7 @@ MonoBehaviour:
   groundLayers:
     serializedVersion: 2
     m_Bits: 1
-  groundRayLength: 0.1
+  groundRayLength: -0.52
   groundRaySpread: 0.5
-  ledgeTestLeft: 0.1
-  ledgeTestRight: 0.1
+  ledgeTestLeft: 0.52
+  ledgeTestRight: 0.5

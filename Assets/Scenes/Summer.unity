@@ -5829,6 +5829,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -4171558177718851673, guid: faf8e85bdb22d45d6ad6305659aecb3a, type: 3}
+      propertyPath: speed
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -4171558177718851673, guid: faf8e85bdb22d45d6ad6305659aecb3a, type: 3}
+      propertyPath: groundRayLength
+      value: -0.52
+      objectReference: {fileID: 0}
     - target: {fileID: 674321439947769066, guid: faf8e85bdb22d45d6ad6305659aecb3a, type: 3}
       propertyPath: m_RootOrder
       value: 4
