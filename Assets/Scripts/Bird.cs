@@ -35,6 +35,9 @@ public class Bird : MonoBehaviour
     internal Rigidbody2D rb;
     internal SpriteRenderer sr;
 
+    public AudioClip clip;
+    private AudioSource source;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -42,6 +45,7 @@ public class Bird : MonoBehaviour
         speed = original_speed;
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
+        source = GetComponent<AudioSource>();
     }
 
 
@@ -175,6 +179,7 @@ public class Bird : MonoBehaviour
             {
                 jump_timer = 0.1f;
                 Jump();
+                source.PlayOneShot(clip);
             }
         }
         if (jump_timer > 0)
@@ -185,6 +190,7 @@ public class Bird : MonoBehaviour
                 if (!Input.GetKey(KeyCode.C))
                 {
                     ShortHop();
+                    source.PlayOneShot(clip);
                 }
             }
         }
@@ -194,10 +200,12 @@ public class Bird : MonoBehaviour
             if (!IsOnLeftWall() && !IsOnRightWall())
             {
                 AirJump();
+                source.PlayOneShot(clip);
             }
             else
             {
                 WallJump();
+                source.PlayOneShot(clip);
             }
         }      
     }
