@@ -95,7 +95,7 @@ public class Bird : MonoBehaviour
     {
         float distToGround = GetComponent<CapsuleCollider2D>().bounds.extents.y - 0.05f;
         Vector3 ray_start = new Vector3(transform.position.x, transform.position.y - distToGround, transform.position.z);
-        RaycastHit2D floorHit = Physics2D.Raycast(ray_start, Vector2.down, 0.1f, birdlayer); 
+        RaycastHit2D floorHit = Physics2D.Raycast(ray_start, Vector2.down, 0.1f, birdlayer);
         return floorHit.collider != null;
     }
 
