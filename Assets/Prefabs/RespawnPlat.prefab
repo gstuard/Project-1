@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4154600158131534344}
   - component: {fileID: 4133870531977780256}
   m_Layer: 0
-  m_Name: Respawn Plat
+  m_Name: RespawnPlat
   m_TagString: Respawn
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
