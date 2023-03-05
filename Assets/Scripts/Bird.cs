@@ -368,7 +368,8 @@ public class Bird : MonoBehaviour
 
     public void Respawn()
     {
-        sr.color = Color.black;
+        move_lock = 0.95f;
+        sr.color = Color.clear;
         // bird does death animation here, next line would have to change, use a coroutine?
         transform.position = respawn;
         current_frame.GetComponentInParent<Frame>().RestartLevel(); // fix this?
@@ -392,19 +393,18 @@ public class Bird : MonoBehaviour
         {
             speed -= Time.deltaTime * air_friction;
         }
-        if (speed < original_speed)
-        {
-            speed = original_speed; // this removes slowness...
-        }
-        // to do grounded timer
+        //if (speed < original_speed)
+        //{
+        //    speed = original_speed; // this removes slowness...
+        //}
 
         if (move_lock > 0)
         {
             move_lock -= Time.deltaTime;
-        }
-        else if (sr.color == Color.black)
-        {
-            sr.color = Color.blue;
+            if (move_lock > 0.1f)
+            {
+                sr.color = Color.clear;
+            }
         }
     }
 
