@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Stage
   - Enemy
+  - Ice
   layers:
   - Default
   - TransparentFX

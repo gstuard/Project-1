@@ -100,6 +100,19 @@ public class Bird : MonoBehaviour
     }
 
 
+    bool IsOnIce() // Ice!
+    {
+        float distToGround = GetComponent<CapsuleCollider2D>().bounds.extents.y - 0.05f;
+        Vector3 ray_start = new Vector3(transform.position.x, transform.position.y - distToGround, transform.position.z);
+        RaycastHit2D floorHit = Physics2D.Raycast(ray_start, Vector2.down, 0.1f, birdlayer);
+        if (floorHit.collider != null)
+        {
+            return floorHit.collider.CompareTag("Ice");
+        }
+        return false;
+    }
+
+
     bool IsOnLeftWall()
     {
         float distToWall = GetComponent<CapsuleCollider2D>().bounds.extents.x + 0.05f;
@@ -186,7 +199,7 @@ public class Bird : MonoBehaviour
         {
             jump_index = 0;
             flight_timer = .9f;
-            if (Input.GetKeyDown(KeyCode.UpArrow))
+            if (Input.GetKeyDown(KeyCode.C))
             {
                 jump_timer = 0.1f;
                 Jump();
@@ -198,7 +211,7 @@ public class Bird : MonoBehaviour
             jump_timer -= Time.deltaTime;
             if (jump_timer <= 0)
             {
-                if (!Input.GetKey(KeyCode.UpArrow))
+                if (!Input.GetKey(KeyCode.C))
                 {
                     ShortHop();
                     source.PlayOneShot(clip);
@@ -206,7 +219,7 @@ public class Bird : MonoBehaviour
             }
         }
 
-        else if (Input.GetKeyDown(KeyCode.UpArrow))
+        else if (Input.GetKeyDown(KeyCode.C))
         {
             if (!IsOnLeftWall() && !IsOnRightWall())
             {
@@ -224,6 +237,10 @@ public class Bird : MonoBehaviour
 
     void GroundMove()
     {
+        if (!IsOnIce())
+        {
+
+        }
         if (Input.GetKey(KeyCode.LeftArrow))
         {
             rb.velocity = new Vector2(-speed * 0.8f, rb.velocity.y);
@@ -333,7 +350,7 @@ public class Bird : MonoBehaviour
 
     void FlyUpdate()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && flight_timer > 0 && !flying)
+        if (Input.GetKeyDown(KeyCode.X) && flight_timer > 0 && !flying)
         {
             Fly();
         }
