@@ -7,7 +7,7 @@ public class ButtonControl : MonoBehaviour
 {
     public void PlayGame()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        SceneManager.LoadScene("Spring");
     }
 
     public void SelectSpring()

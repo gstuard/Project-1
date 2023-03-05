@@ -136,7 +136,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cb2729fe5573454da71d4e1c2ffde0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 1
+  speed: 2
   grounded: 1
   groundLayers:
     serializedVersion: 2
