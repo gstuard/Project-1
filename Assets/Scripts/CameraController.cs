@@ -11,25 +11,32 @@ public class CameraController : MonoBehaviour
     public float globalMinX;
     public float globalMinY;
 
+    internal float tempMaxX;
+    internal float tempMaxY;
+    internal float tempMinX;
+    internal float tempMinY;
+
+    public int current_frame;
+
+    public GameObject[] frames;
+
     void Start()
     {
-
+        ToFrame(current_frame);
     }
 
-    void Update()
-    {
-        Vector3 start = transform.position;
-        Vector3 goal = target.position + new Vector3(0.0f, 0.0f, -10);
-        float t = Time.deltaTime * speed;
-        Vector3 newPosition = Vector3.Lerp(start, goal, t);
-        float maxX = globalMaxX - Camera.main.orthographicSize * Camera.main.aspect;
-        float maxY = globalMaxY - Camera.main.orthographicSize;
-        float minX = globalMinX + Camera.main.orthographicSize * Camera.main.aspect;
-        float minY = globalMinY + Camera.main.orthographicSize;
-        newPosition.x = Mathf.Clamp(newPosition.x, minX, maxX);
-        newPosition.y = Mathf.Clamp(newPosition.y, minY, maxY);
-        transform.position = newPosition;
 
+    public void ToFrame(int frame_index) 
+    {
+        tempMaxX = frames[frame_index].GetComponent<Frame>().frameMaxX;
+        tempMaxY = frames[frame_index].GetComponent<Frame>().frameMaxY;
+        tempMinX = frames[frame_index].GetComponent<Frame>().frameMinX;
+        tempMinY = frames[frame_index].GetComponent<Frame>().frameMinY;
+    }
+
+
+    void SwapFrames()
+    {
         if (target.position.x > globalMaxX)
         {
             globalMaxX += 18;
@@ -50,6 +57,28 @@ public class CameraController : MonoBehaviour
             globalMaxY -= 10;
             globalMinY -= 10;
         }
+    }
+
+
+    void Update()
+    {
+        globalMaxX = Mathf.Lerp(globalMaxX, tempMaxX, Time.deltaTime * 4);
+        globalMaxY = Mathf.Lerp(globalMaxY, tempMaxY, Time.deltaTime * 4);
+        globalMinX = Mathf.Lerp(globalMinX, tempMinX, Time.deltaTime * 4);
+        globalMinY = Mathf.Lerp(globalMinY, tempMinY, Time.deltaTime * 4);
+
+        Vector3 start = transform.position;
+        Vector3 goal = target.position + new Vector3(0.0f, 0.0f, -10);
+        float t = Time.deltaTime * speed;
+        Vector3 newPosition = Vector3.Lerp(start, goal, t);
+        float maxX = globalMaxX - Camera.main.orthographicSize * Camera.main.aspect;
+        float maxY = globalMaxY - Camera.main.orthographicSize;
+        float minX = globalMinX + Camera.main.orthographicSize * Camera.main.aspect;
+        float minY = globalMinY + Camera.main.orthographicSize;
+
+        newPosition.x = Mathf.Clamp(newPosition.x, minX, maxX);
+        newPosition.y = Mathf.Clamp(newPosition.y, minY, maxY);
+        transform.position = newPosition;
     }
 
     private void OnDrawGizmosSelected()

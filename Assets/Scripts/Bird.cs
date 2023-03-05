@@ -1,14 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Burst.CompilerServices;
 using UnityEngine;
 
 public class Bird : MonoBehaviour
 {
-
     public float original_speed;
     public float friction; // vestigial
     public float air_friction; // 1 is VERY low, 10 is avg, 20 is good
-
 
     public float jump_height;
     public float[] jump_heights;
@@ -30,6 +29,7 @@ public class Bird : MonoBehaviour
     internal float normal_gravity = 2.25f;
     internal float fast_gravity = 5.5f;
 
+    public GameObject current_frame;
     public Vector3 respawn = new Vector3(-1, -3, 0);
 
     internal Rigidbody2D rb;
@@ -37,6 +37,7 @@ public class Bird : MonoBehaviour
 
     public AudioClip clip;
     private AudioSource source;
+    public GameObject maincamera;
 
     // Start is called before the first frame update
     void Start()
@@ -58,6 +59,11 @@ public class Bird : MonoBehaviour
             Debug.Log("Respawn set");
             respawn = collision.gameObject.transform.position;
             respawn = new Vector3(respawn.x, respawn.y + 1, respawn.z);
+            current_frame = collision.gameObject;
+        }
+        if (collision.gameObject.CompareTag("Enemy")) // should we be using area effector?
+        {
+            Respawn();
         }
     }
 
@@ -140,6 +146,7 @@ public class Bird : MonoBehaviour
         else x_vel = speed; // if on left wall
 
         move_lock = 0.08f;
+        jump_index = 0;
         rb.velocity = new Vector2(x_vel, jump_height * .75f); // how high should wall jump be?
     }
 
@@ -152,6 +159,10 @@ public class Bird : MonoBehaviour
             {
                 flying = false;
                 rb.velocity = new Vector2(rb.velocity.x, Mathf.Max(0, rb.velocity.y) / 2 + jump_heights[jump_index]);
+                if (jump_heights[jump_index] < Mathf.Max(0, rb.velocity.y) / 2)
+                {
+                    rb.velocity = new Vector2(rb.velocity.x, (rb.velocity.y - jump_heights[jump_index]) * 2);
+                }
                 jump_index++;
             }
             else if (jump_heights[jump_index] > rb.velocity.y)
@@ -175,7 +186,7 @@ public class Bird : MonoBehaviour
         {
             jump_index = 0;
             flight_timer = .9f;
-            if (Input.GetKeyDown(KeyCode.C))
+            if (Input.GetKeyDown(KeyCode.UpArrow))
             {
                 jump_timer = 0.1f;
                 Jump();
@@ -187,7 +198,7 @@ public class Bird : MonoBehaviour
             jump_timer -= Time.deltaTime;
             if (jump_timer <= 0)
             {
-                if (!Input.GetKey(KeyCode.C))
+                if (!Input.GetKey(KeyCode.UpArrow))
                 {
                     ShortHop();
                     source.PlayOneShot(clip);
@@ -195,7 +206,7 @@ public class Bird : MonoBehaviour
             }
         }
 
-        else if (Input.GetKeyDown(KeyCode.C))
+        else if (Input.GetKeyDown(KeyCode.UpArrow))
         {
             if (!IsOnLeftWall() && !IsOnRightWall())
             {
@@ -213,18 +224,21 @@ public class Bird : MonoBehaviour
 
     void GroundMove()
     {
-        //speed = original_speed;
         if (Input.GetKey(KeyCode.LeftArrow))
         {
-            rb.velocity = new Vector2(-speed, rb.velocity.y);
+            rb.velocity = new Vector2(-speed * 0.8f, rb.velocity.y);
         }
         if (Input.GetKey(KeyCode.RightArrow))
         {
-            rb.velocity = new Vector2(speed, rb.velocity.y);
+            rb.velocity = new Vector2(speed * 0.8f, rb.velocity.y);
         }
         if (!Input.GetKey(KeyCode.LeftArrow) && !Input.GetKey(KeyCode.RightArrow))
         {
             // friction is now unused, would be used here
+            rb.velocity = new Vector2(0, rb.velocity.y);
+        }
+        if (move_lock > 0) // this is a short term fix
+        {
             rb.velocity = new Vector2(0, rb.velocity.y);
         }
     }
@@ -299,7 +313,6 @@ public class Bird : MonoBehaviour
 
             FastFall();
         }
-        else move_lock -= Time.deltaTime;
     }
 
 
@@ -320,7 +333,7 @@ public class Bird : MonoBehaviour
 
     void FlyUpdate()
     {
-        if (Input.GetKeyDown(KeyCode.X) && flight_timer > 0 && !flying)
+        if (Input.GetKeyDown(KeyCode.Space) && flight_timer > 0 && !flying)
         {
             Fly();
         }
@@ -333,8 +346,9 @@ public class Bird : MonoBehaviour
 
             if (input_vector != Vector2.zero)
             {
-                Vector2 flight_vel = Vector2.Lerp(rb.velocity.normalized, input_vector, .195f);
-                rb.velocity = flight_vel;
+                Vector2 temp_vel = rb.velocity;
+                Vector2.SmoothDamp(Vector2.zero, input_vector, ref temp_vel, 0.3f);
+                rb.velocity = temp_vel;
             }
 
             rb.velocity = rb.velocity.normalized;
@@ -352,16 +366,22 @@ public class Bird : MonoBehaviour
     }
 
 
+    public void Respawn()
+    {
+        sr.color = Color.black;
+        // bird does death animation here, next line would have to change, use a coroutine?
+        transform.position = respawn;
+        current_frame.GetComponentInParent<Frame>().RestartLevel(); // fix this?
+        current_frame.GetComponent<Respawn>().PanCamera();
+        GetComponentInChildren<RespawnCutscene>().StartCutscene();
+    }
+
+
     void LifeUpdate()
     {
-        //if (transform.position.y < -20f)
-        //{
-        //    transform.position = respawn;
-        //}
-
         if (Input.GetKey(KeyCode.R))
         {
-            transform.position = respawn;
+            Respawn();
         }
     }
 
@@ -378,7 +398,14 @@ public class Bird : MonoBehaviour
         }
         // to do grounded timer
 
-        
+        if (move_lock > 0)
+        {
+            move_lock -= Time.deltaTime;
+        }
+        else if (sr.color == Color.black)
+        {
+            sr.color = Color.blue;
+        }
     }
 
 
