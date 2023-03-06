@@ -146,7 +146,7 @@ public class Bird : MonoBehaviour
     {
         if (flying) // this happens when the raycast has connected but there hasnt been a collision
         {
-            rb.velocity = new Vector2(rb.velocity.x * 2, jump_height * 1.4f);
+            rb.velocity = new Vector2(rb.velocity.x * 2, jump_height * 1.1f);
             speed *= 1.5f; 
 
             flying = false;
@@ -439,7 +439,7 @@ public class Bird : MonoBehaviour
     public void Respawn()
     {
         move_lock = 0.95f;
-        //sr.color = Color.clear;
+        sr.color = Color.clear;
         // bird does death animation here, next line would have to change, use a coroutine?
         transform.position = respawn;
         rb.velocity = Vector2.zero;
@@ -482,7 +482,7 @@ public class Bird : MonoBehaviour
         }
         else if (!flying)
         {
-            //sr.color = Color.blue;
+            sr.color = Color.white;
         }
 
         if (in_freeze_zone)
@@ -491,7 +491,7 @@ public class Bird : MonoBehaviour
             if (freeze_timer > 2)
             {
                 move_lock = 15f;
-                sr.color = Color.white;
+                sr.color = Color.blue;
             } // make way for cold to kill you?
         }
         else freeze_timer = 0;
