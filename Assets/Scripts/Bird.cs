@@ -71,6 +71,12 @@ public class Bird : MonoBehaviour
     }
 
 
+    public void SetMoveLock(float new_move_lock)
+    {
+        move_lock = new_move_lock;
+    }
+
+
     Vector2 GetInputVector()
     {
         Vector2 input_vector = new Vector2(0, 0);
@@ -133,7 +139,7 @@ public class Bird : MonoBehaviour
     }
 
 
-    void Jump() // make bird slightly faster in the air?
+    void Jump()
     {
         if (flying) // this happens when the raycast has connected but there hasnt been a collision
         {
@@ -146,7 +152,6 @@ public class Bird : MonoBehaviour
         else if (jump_height > rb.velocity.y)
         {
             rb.velocity = new Vector2(rb.velocity.x, jump_height);
-            //speed *= 9 / 8;
         }
     }
 
@@ -427,17 +432,14 @@ public class Bird : MonoBehaviour
     }
 
 
-    public void Freeze()
-    {
-
-    }
-
-
     void PhysUpdate()
     {
         if (speed > original_speed && !flying)
         {
-            speed -= Time.deltaTime * air_momentum; 
+            speed -= 2;
+            Debug.Log(speed);
+            Debug.Log(original_speed);
+            Debug.Log(flying);
         }
         //if (speed < original_speed)
         //{

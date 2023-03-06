@@ -16,13 +16,30 @@ public class CameraController : MonoBehaviour
     internal float tempMinX;
     internal float tempMinY;
 
-    public int current_frame;
+    internal int zoom = 0;
+    internal float original_size;
 
+    public int current_frame;
     public GameObject[] frames;
+
 
     void Start()
     {
         ToFrame(current_frame);
+        original_size = Camera.current.orthographicSize;
+    }
+
+
+    void ZoomOut()
+    {
+        Camera.current.orthographicSize += Time.deltaTime;
+    }
+
+
+    void ZoomIn()
+    {
+        Camera.current.orthographicSize -= Time.deltaTime;
+        Camera.current.orthographicSize = Mathf.Max(original_size, Camera.current.orthographicSize);
     }
 
 
@@ -79,6 +96,15 @@ public class CameraController : MonoBehaviour
         newPosition.x = Mathf.Clamp(newPosition.x, minX, maxX);
         newPosition.y = Mathf.Clamp(newPosition.y, minY, maxY);
         transform.position = newPosition;
+
+        if (zoom < 0)
+        {
+            ZoomIn();
+        }
+        if (zoom > 0)
+        {
+            ZoomOut();
+        }
     }
 
     private void OnDrawGizmosSelected()
