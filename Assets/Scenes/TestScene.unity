@@ -550,11 +550,13 @@ MonoBehaviour:
   original_speed: 5
   friction: 20
   air_friction: 55
+  air_momentum: 0
   jump_height: 7.5
   jump_heights: []
-  birdlayer:
+  notbirdlayer:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 0
+  in_freeze_zone: 0
   current_frame: {fileID: 0}
   respawn: {x: 0, y: 0, z: 0}
   clip: {fileID: 0}
@@ -744,7 +746,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1046272013}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.5268176, y: 4.389312, z: 0}
+  m_LocalPosition: {x: -1.072, y: 3.9345, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -823,14 +825,16 @@ MonoBehaviour:
   original_speed: 5
   friction: 20
   air_friction: 55
+  air_momentum: 0
   jump_height: 7.5
   jump_heights:
   - 6
   - 3
   - 0
-  birdlayer:
+  notbirdlayer:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 0
+  in_freeze_zone: 0
   current_frame: {fileID: 0}
   respawn: {x: -1, y: -3, z: 0}
   clip: {fileID: 0}
