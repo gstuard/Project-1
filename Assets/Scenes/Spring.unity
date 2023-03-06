@@ -676,19 +676,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59d4dd3d45e0646c78a1607376238c52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cameracontroller: {fileID: 1044668579}
   bird: {fileID: 224372652}
   birdlayer:
     serializedVersion: 2
     m_Bits: 64
+  frame_index: 3
   frameMaxX: 80
   frameMaxY: -5
   frameMinX: 27
   frameMinY: -80
-  end_ray_origin: {x: 27, y: -5}
-  end_ray_direction: {x: 1, y: 0}
-  end_ray_length: 40
-  frame_index: 3
-  cameracontroller: {fileID: 1044668579}
+  direction_to_next_frame: {x: -1, y: 0}
   hitbox_origin: {x: 0, y: 0}
   hitbox_direction: {x: 0, y: 0}
   hitbox_length: 0
@@ -736,19 +734,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59d4dd3d45e0646c78a1607376238c52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cameracontroller: {fileID: 1044668579}
   bird: {fileID: 224372652}
   birdlayer:
     serializedVersion: 2
     m_Bits: 64
+  frame_index: 1
   frameMaxX: 27
   frameMaxY: 5
   frameMinX: 9
   frameMinY: -5
-  end_ray_origin: {x: 27, y: -5}
-  end_ray_direction: {x: 0, y: 1}
-  end_ray_length: 20
-  frame_index: 1
-  cameracontroller: {fileID: 1044668579}
+  direction_to_next_frame: {x: 1, y: 0}
   hitbox_origin: {x: 0, y: 0}
   hitbox_direction: {x: 0, y: 0}
   hitbox_length: 0
@@ -796,19 +792,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59d4dd3d45e0646c78a1607376238c52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cameracontroller: {fileID: 1044668579}
   bird: {fileID: 224372652}
   birdlayer:
     serializedVersion: 2
     m_Bits: 64
+  frame_index: 0
   frameMaxX: 9
   frameMaxY: 5
   frameMinX: -9
   frameMinY: -5
-  end_ray_origin: {x: 9, y: -5}
-  end_ray_direction: {x: 0, y: 1}
-  end_ray_length: 20
-  frame_index: 0
-  cameracontroller: {fileID: 1044668579}
+  direction_to_next_frame: {x: 1, y: 0}
   hitbox_origin: {x: -8, y: -5.5}
   hitbox_direction: {x: 1, y: 0}
   hitbox_length: 20
@@ -2542,19 +2536,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59d4dd3d45e0646c78a1607376238c52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cameracontroller: {fileID: 1044668579}
   bird: {fileID: 224372652}
   birdlayer:
     serializedVersion: 2
     m_Bits: 64
+  frame_index: 2
   frameMaxX: 80
   frameMaxY: 5
   frameMinX: 27
   frameMinY: -5
-  end_ray_origin: {x: 27, y: -5}
-  end_ray_direction: {x: 1, y: 0}
-  end_ray_length: 50
-  frame_index: 2
-  cameracontroller: {fileID: 1044668579}
+  direction_to_next_frame: {x: 0, y: -1}
   hitbox_origin: {x: 0, y: 0}
   hitbox_direction: {x: 0, y: 0}
   hitbox_length: 0
