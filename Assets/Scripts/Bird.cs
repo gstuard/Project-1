@@ -463,9 +463,6 @@ public class Bird : MonoBehaviour
         if (speed > original_speed && !flying)
         {
             speed -= 2;
-            Debug.Log(speed);
-            Debug.Log(original_speed);
-            Debug.Log(flying);
         }
         if (speed < original_speed)
         {

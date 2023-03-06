@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// NOTE: this used to be a leaf, until we used a sprite for a cloud instead!
 public class Leaf : MonoBehaviour
 {
     public float fall_speed;
@@ -34,7 +35,7 @@ public class Leaf : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        movement_timer = 1f;
+        movement_timer = .9f;
     }
 
     // Update is called once per frame
@@ -43,7 +44,7 @@ public class Leaf : MonoBehaviour
         if (movement_timer > 0)
         {
             movement_timer -= Time.deltaTime;
-            if (movement_timer > .15)
+            if (movement_timer > .12)
             {
                 
             }
