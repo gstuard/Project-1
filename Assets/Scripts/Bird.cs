@@ -254,10 +254,12 @@ public class Bird : MonoBehaviour
             {
                 if (Input.GetKey(KeyCode.LeftArrow))
                 {
+                    sr.flipY = true;
                     rb.velocity = new Vector2(-speed * 0.8f, rb.velocity.y);
                 }
                 if (Input.GetKey(KeyCode.RightArrow))
                 {
+                    sr.flipY = false;
                     rb.velocity = new Vector2(speed * 0.8f, rb.velocity.y);
                 }
                 if (!Input.GetKey(KeyCode.LeftArrow) && !Input.GetKey(KeyCode.RightArrow))
@@ -278,10 +280,12 @@ public class Bird : MonoBehaviour
             {
                 if (Input.GetKey(KeyCode.LeftArrow))
                 {
+                    sr.flipY = true;
                     rb.velocity = new Vector2(rb.velocity.x - Time.deltaTime * friction, rb.velocity.y);
                 }
                 if (Input.GetKey(KeyCode.RightArrow))
                 {
+                    sr.flipY = false;
                     rb.velocity = new Vector2(rb.velocity.x + Time.deltaTime * friction, rb.velocity.y);
                 }
             }
@@ -311,6 +315,7 @@ public class Bird : MonoBehaviour
             speed = original_speed;
             if (Input.GetKey(KeyCode.RightArrow))
             {
+                sr.flipY = true;
                 fall_speed = 2f;
             }
         }
@@ -319,6 +324,7 @@ public class Bird : MonoBehaviour
             speed = original_speed;
             if (Input.GetKey(KeyCode.LeftArrow))
             {
+                sr.flipY = false;
                 fall_speed = 2f;
             }
         }
@@ -349,11 +355,13 @@ public class Bird : MonoBehaviour
         {
             if (Input.GetKey(KeyCode.LeftArrow))
             {
+                sr.flipY = true;
                 float x_vel = Mathf.Max(-speed, rb.velocity.x - Time.deltaTime * air_friction);
                 rb.velocity = new Vector2(x_vel, rb.velocity.y);
             }
             if (Input.GetKey(KeyCode.RightArrow))
             {
+                sr.flipY = false;
                 float x_vel = Mathf.Min(speed, rb.velocity.x + Time.deltaTime * air_friction);
                 rb.velocity = new Vector2(x_vel, rb.velocity.y);
             }
