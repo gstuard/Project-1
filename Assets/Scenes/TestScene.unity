@@ -561,6 +561,7 @@ MonoBehaviour:
   respawn: {x: 0, y: 0, z: 0}
   clip: {fileID: 0}
   maincamera: {fileID: 0}
+  animator: {fileID: 0}
 --- !u!50 &562706146
 Rigidbody2D:
   serializedVersion: 4
@@ -839,6 +840,7 @@ MonoBehaviour:
   respawn: {x: -1, y: -3, z: 0}
   clip: {fileID: 0}
   maincamera: {fileID: 393585785}
+  animator: {fileID: 0}
 --- !u!1 &1690369285
 GameObject:
   m_ObjectHideFlags: 0
