@@ -24,11 +24,11 @@ public class Cutscene : MonoBehaviour
             {
                 maincamera.GetComponent<CameraController>().zoom = 1;
             }
-            else if (cutscene_time < 6f)
+            else if (cutscene_time < 5f)
             {
                 maincamera.GetComponent<CameraController>().zoom = 0;
             }
-            else if (cutscene_time < 8f)
+            else if (cutscene_time < 7f)
             {
                 maincamera.GetComponent<CameraController>().zoom = -1;
             }

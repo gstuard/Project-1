@@ -31,13 +31,13 @@ public class CameraController : MonoBehaviour
 
     void ZoomOut()
     {
-        Camera.current.orthographicSize += Time.deltaTime * 2;
+        Camera.current.orthographicSize += Time.deltaTime * 2.7f;
     }
 
 
     void ZoomIn()
     {
-        Camera.current.orthographicSize -= Time.deltaTime * 2;
+        Camera.current.orthographicSize -= Time.deltaTime * 2.7f;
         Camera.current.orthographicSize = Mathf.Max(original_size, Camera.current.orthographicSize);
     }
 
@@ -48,6 +48,7 @@ public class CameraController : MonoBehaviour
         tempMaxY = frames[frame_index].GetComponent<Frame>().frameMaxY;
         tempMinX = frames[frame_index].GetComponent<Frame>().frameMinX;
         tempMinY = frames[frame_index].GetComponent<Frame>().frameMinY;
+        current_frame = frame_index;
     }
 
 
