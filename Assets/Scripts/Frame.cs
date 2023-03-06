@@ -5,7 +5,7 @@ using UnityEngine;
 public class Frame : MonoBehaviour
 {
     public GameObject bird;
-    public LayerMask notbirdlayer;
+    public LayerMask birdlayer;
 
     public float frameMaxX;
     public float frameMaxY;
@@ -46,7 +46,7 @@ public class Frame : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        RaycastHit2D below_screen = Physics2D.Raycast(hitbox_origin, hitbox_direction, hitbox_length, notbirdlayer);
+        RaycastHit2D below_screen = Physics2D.Raycast(hitbox_origin, hitbox_direction, hitbox_length, birdlayer);
         Debug.DrawRay(hitbox_origin, hitbox_direction * hitbox_length, Color.red);
         if (below_screen.collider != null)
         {
@@ -54,7 +54,7 @@ public class Frame : MonoBehaviour
             bird.GetComponent<Bird>().Respawn();
         }
 
-        RaycastHit2D end_ray = Physics2D.Raycast(end_ray_origin, end_ray_direction, end_ray_length, notbirdlayer);
+        RaycastHit2D end_ray = Physics2D.Raycast(end_ray_origin, end_ray_direction, end_ray_length, birdlayer);
         Debug.DrawRay(end_ray_origin, end_ray_direction * end_ray_length, Color.green);
         if (end_ray.collider != null)
         {

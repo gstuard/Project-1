@@ -8,18 +8,21 @@ public class Bird : MonoBehaviour
     public float original_speed;
     public float friction; // vestigial
     public float air_friction; // 1 is VERY low, 10 is avg, 20 is good
+    public float air_momentum; // lower means more momentum, lose speed slower
 
     public float jump_height;
     public float[] jump_heights;
     internal int jump_index = 0;
     internal float jump_timer = 0;
 
-    public LayerMask birdlayer;
+    public LayerMask notbirdlayer;
 
     internal float speed;
     internal float flight_timer = 0;
     internal float flight_angle = 0; // add gravity speed boost later
     internal bool flying = false;
+    public bool in_freeze_zone = false;
+    internal float freeze_timer = 0;
     internal float move_lock = 0f;
     //internal bool move_lock = false;
 
@@ -95,7 +98,7 @@ public class Bird : MonoBehaviour
     {
         float distToGround = GetComponent<CapsuleCollider2D>().bounds.extents.y - 0.05f;
         Vector3 ray_start = new Vector3(transform.position.x, transform.position.y - distToGround, transform.position.z);
-        RaycastHit2D floorHit = Physics2D.Raycast(ray_start, Vector2.down, 0.1f, birdlayer);
+        RaycastHit2D floorHit = Physics2D.Raycast(ray_start, Vector2.down, 0.1f, notbirdlayer); 
         return floorHit.collider != null;
     }
 
@@ -104,7 +107,7 @@ public class Bird : MonoBehaviour
     {
         float distToGround = GetComponent<CapsuleCollider2D>().bounds.extents.y - 0.05f;
         Vector3 ray_start = new Vector3(transform.position.x, transform.position.y - distToGround, transform.position.z);
-        RaycastHit2D floorHit = Physics2D.Raycast(ray_start, Vector2.down, 0.1f, birdlayer);
+        RaycastHit2D floorHit = Physics2D.Raycast(ray_start, Vector2.down, 0.1f, notbirdlayer);
         if (floorHit.collider != null)
         {
             return floorHit.collider.CompareTag("Ice");
@@ -117,7 +120,7 @@ public class Bird : MonoBehaviour
     {
         float distToWall = GetComponent<CapsuleCollider2D>().bounds.extents.x + 0.05f;
         Vector3 ray_start = new Vector3(transform.position.x - distToWall, transform.position.y, transform.position.z);
-        RaycastHit2D wallHit = Physics2D.Raycast(ray_start, Vector2.right, 0.1f, birdlayer);
+        RaycastHit2D wallHit = Physics2D.Raycast(ray_start, Vector2.right, 0.1f, notbirdlayer);
         return wallHit.collider != null;
     }
 
@@ -125,7 +128,7 @@ public class Bird : MonoBehaviour
     {
         float distToWall = GetComponent<CapsuleCollider2D>().bounds.extents.x + 0.05f;
         Vector3 ray_start = new Vector3(transform.position.x + distToWall, transform.position.y, transform.position.z);
-        RaycastHit2D wallHit = Physics2D.Raycast(ray_start, Vector2.left, 0.1f, birdlayer);
+        RaycastHit2D wallHit = Physics2D.Raycast(ray_start, Vector2.left, 0.1f, notbirdlayer);
         return wallHit.collider != null;
     }
 
@@ -135,7 +138,7 @@ public class Bird : MonoBehaviour
         if (flying) // this happens when the raycast has connected but there hasnt been a collision
         {
             rb.velocity = new Vector2(rb.velocity.x * 2, jump_height * 1.4f);
-            speed *= 2f; // to do: speed magnifier var
+            speed *= 1.5f; 
 
             flying = false;
             flight_timer = 1f;
@@ -195,68 +198,84 @@ public class Bird : MonoBehaviour
 
     void JumpUpdate()
     {
-        if (IsGrounded())
+        if (move_lock <= 0)
         {
-            jump_index = 0;
-            flight_timer = .9f;
-            if (Input.GetKeyDown(KeyCode.C))
+            if (IsGrounded())
             {
-                jump_timer = 0.1f;
-                Jump();
-                source.PlayOneShot(clip);
-            }
-        }
-        if (jump_timer > 0)
-        {
-            jump_timer -= Time.deltaTime;
-            if (jump_timer <= 0)
-            {
-                if (!Input.GetKey(KeyCode.C))
+                jump_index = 0;
+                flight_timer = .9f;
+                if (Input.GetKeyDown(KeyCode.C))
                 {
-                    ShortHop();
+                    jump_timer = 0.1f;
+                    Jump();
+                    source.PlayOneShot(clip);
+                }
+            }
+            if (jump_timer > 0)
+            {
+                jump_timer -= Time.deltaTime;
+                if (jump_timer <= 0)
+                {
+                    if (!Input.GetKey(KeyCode.C))
+                    {
+                        ShortHop();
+                        source.PlayOneShot(clip);
+                    }
+                }
+            }
+
+            else if (Input.GetKeyDown(KeyCode.C))
+            {
+                if (!IsOnLeftWall() && !IsOnRightWall())
+                {
+                    AirJump();
+                    source.PlayOneShot(clip);
+                }
+                else
+                {
+                    WallJump();
                     source.PlayOneShot(clip);
                 }
             }
         }
-
-        else if (Input.GetKeyDown(KeyCode.C))
-        {
-            if (!IsOnLeftWall() && !IsOnRightWall())
-            {
-                AirJump();
-                source.PlayOneShot(clip);
-            }
-            else
-            {
-                WallJump();
-                source.PlayOneShot(clip);
-            }
-        }      
     }
-
+        
 
     void GroundMove()
     {
         if (!IsOnIce())
         {
-
+            if (move_lock <= 0)
+            {
+                if (Input.GetKey(KeyCode.LeftArrow))
+                {
+                    rb.velocity = new Vector2(-speed * 0.8f, rb.velocity.y);
+                }
+                if (Input.GetKey(KeyCode.RightArrow))
+                {
+                    rb.velocity = new Vector2(speed * 0.8f, rb.velocity.y);
+                }
+                if (!Input.GetKey(KeyCode.LeftArrow) && !Input.GetKey(KeyCode.RightArrow))
+                {
+                    // friction should be used here
+                    rb.velocity = new Vector2(0, rb.velocity.y);
+                }
+            }
         }
-        if (Input.GetKey(KeyCode.LeftArrow))
+        else
         {
-            rb.velocity = new Vector2(-speed * 0.8f, rb.velocity.y);
-        }
-        if (Input.GetKey(KeyCode.RightArrow))
-        {
-            rb.velocity = new Vector2(speed * 0.8f, rb.velocity.y);
-        }
-        if (!Input.GetKey(KeyCode.LeftArrow) && !Input.GetKey(KeyCode.RightArrow))
-        {
-            // friction is now unused, would be used here
-            rb.velocity = new Vector2(0, rb.velocity.y);
-        }
-        if (move_lock > 0) // this is a short term fix
-        {
-            rb.velocity = new Vector2(0, rb.velocity.y);
+            speed = original_speed * 2;
+            if (move_lock <= 0)
+            {
+                if (Input.GetKey(KeyCode.LeftArrow))
+                {
+                    rb.velocity = new Vector2(rb.velocity.x - Time.deltaTime * friction, rb.velocity.y);
+                }
+                if (Input.GetKey(KeyCode.RightArrow))
+                {
+                    rb.velocity = new Vector2(rb.velocity.x + Time.deltaTime * friction, rb.velocity.y);
+                }
+            }
         }
     }
 
@@ -349,36 +368,39 @@ public class Bird : MonoBehaviour
 
 
     void FlyUpdate()
-    {
-        if (Input.GetKeyDown(KeyCode.X) && flight_timer > 0 && !flying)
+    { 
+        if (move_lock <= 0)
         {
-            Fly();
-        }
-
-        if (flying) 
-        {
-            flight_timer -= Time.deltaTime;
-
-            Vector2 input_vector = GetInputVector();
-
-            if (input_vector != Vector2.zero)
+            if (Input.GetKeyDown(KeyCode.X) && flight_timer > 0 && !flying)
             {
-                Vector2 temp_vel = rb.velocity;
-                Vector2.SmoothDamp(Vector2.zero, input_vector, ref temp_vel, 0.3f);
-                rb.velocity = temp_vel;
+                Fly();
             }
 
-            rb.velocity = rb.velocity.normalized;
-            rb.velocity *= speed;
-        } else 
-        {
-            rb.gravityScale = normal_gravity;
-            sr.color = Color.blue;
-        }
+            if (flying)
+            {
+                flight_timer -= Time.deltaTime;
 
-        if (flight_timer <= 0)
-        {
-            flying = false;
+                Vector2 input_vector = GetInputVector();
+
+                if (input_vector != Vector2.zero)
+                {
+                    Vector2 temp_vel = rb.velocity;
+                    Vector2.SmoothDamp(Vector2.zero, input_vector, ref temp_vel, 0.3f);
+                    rb.velocity = temp_vel;
+                }
+
+                rb.velocity = rb.velocity.normalized;
+                rb.velocity *= speed;
+            }
+            else
+            {
+                rb.gravityScale = normal_gravity;
+            }
+
+            if (flight_timer <= 0)
+            {
+                flying = false;
+            }
         }
     }
 
@@ -389,6 +411,7 @@ public class Bird : MonoBehaviour
         sr.color = Color.clear;
         // bird does death animation here, next line would have to change, use a coroutine?
         transform.position = respawn;
+        rb.velocity = Vector2.zero;
         current_frame.GetComponentInParent<Frame>().RestartLevel(); // fix this?
         current_frame.GetComponent<Respawn>().PanCamera();
         GetComponentInChildren<RespawnCutscene>().StartCutscene();
@@ -404,11 +427,17 @@ public class Bird : MonoBehaviour
     }
 
 
+    public void Freeze()
+    {
+
+    }
+
+
     void PhysUpdate()
     {
         if (speed > original_speed && !flying)
         {
-            speed -= Time.deltaTime * air_friction;
+            speed -= Time.deltaTime * air_momentum; 
         }
         //if (speed < original_speed)
         //{
@@ -417,12 +446,27 @@ public class Bird : MonoBehaviour
 
         if (move_lock > 0)
         {
-            move_lock -= Time.deltaTime;
-            if (move_lock > 0.1f)
+            if (IsGrounded() && !IsOnIce() && !in_freeze_zone)
             {
-                sr.color = Color.clear;
+                move_lock = Mathf.Min(1f, move_lock);
             }
+            move_lock -= Time.deltaTime;
         }
+        else if (!flying)
+        {
+            sr.color = Color.blue;
+        }
+
+        if (in_freeze_zone)
+        {
+            freeze_timer += Time.deltaTime;
+            if (freeze_timer > 2)
+            {
+                move_lock = 15f;
+                sr.color = Color.white;
+            } // make way for cold to kill you?
+        }
+        else freeze_timer = 0;
     }
 
 
