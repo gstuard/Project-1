@@ -266,6 +266,10 @@ public class Bird : MonoBehaviour
                     rb.velocity = new Vector2(0, rb.velocity.y);
                 }
             }
+            else if (!in_freeze_zone)
+            {
+                DriftToStop(14f);
+            }
         }
         else
         {
@@ -281,6 +285,21 @@ public class Bird : MonoBehaviour
                     rb.velocity = new Vector2(rb.velocity.x + Time.deltaTime * friction, rb.velocity.y);
                 }
             }
+        }
+    }
+
+
+    void DriftToStop(float air_friction_modifier)
+    {
+        if (rb.velocity.x > 0)
+        {
+            float x_vel = Mathf.Max(0, rb.velocity.x - Time.deltaTime * air_friction / air_friction_modifier);
+            rb.velocity = new Vector2(x_vel, rb.velocity.y);
+        }
+        else if (rb.velocity.x < 0)
+        {
+            float x_vel = Mathf.Min(0, rb.velocity.x + Time.deltaTime * air_friction / air_friction_modifier);
+            rb.velocity = new Vector2(x_vel, rb.velocity.y);
         }
     }
 
@@ -303,7 +322,7 @@ public class Bird : MonoBehaviour
                 fall_speed = 2f;
             }
         }
-    }
+    } 
 
 
     void FastFall()
@@ -340,16 +359,7 @@ public class Bird : MonoBehaviour
             }
             if (!Input.GetKey(KeyCode.LeftArrow) && !Input.GetKey(KeyCode.RightArrow))
             {
-                if (rb.velocity.x > 0)
-                {
-                    float x_vel = Mathf.Max(0, rb.velocity.x - Time.deltaTime * air_friction / 3);
-                    rb.velocity = new Vector2(x_vel, rb.velocity.y);
-                }
-                else if (rb.velocity.x < 0)
-                {
-                    float x_vel = Mathf.Min(0, rb.velocity.x + Time.deltaTime * air_friction / 3);
-                    rb.velocity = new Vector2(x_vel, rb.velocity.y);
-                }
+                DriftToStop(3f);
             }
 
             FastFall();

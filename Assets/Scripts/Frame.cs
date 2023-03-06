@@ -20,10 +20,18 @@ public class Frame : MonoBehaviour
     public float hitbox_length;
 
 
-    // Start is called before the first frame update
-    void Start()
+    private void OnDrawGizmosSelected()
     {
+        Gizmos.color = Color.green;
+        Vector3 cornerRU = new Vector3(frameMaxX, frameMaxY, 0);
+        Vector3 cornerRD = new Vector3(frameMaxX, frameMinY, 0);
+        Vector3 cornerLU = new Vector3(frameMinX, frameMaxY, 0);
+        Vector3 cornerLD = new Vector3(frameMinX, frameMinY, 0);
 
+        Gizmos.DrawLine(cornerRU, cornerRD);
+        Gizmos.DrawLine(cornerRD, cornerLD);
+        Gizmos.DrawLine(cornerLD, cornerLU);
+        Gizmos.DrawLine(cornerLU, cornerRU);
     }
 
 
