@@ -17,9 +17,12 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Spring.unity
     guid: ff50b1f8dbdfa4735a0d2d2afc4b653c
+  - enabled: 0
+    path: 
+    guid: 00000000000000000000000000000000
   - enabled: 1
     path: Assets/Scenes/Summer.unity
-    guid: 931e83e287be442f48931b9c92cf06d1
+    guid: 5f86b4b9da96f4ec699a722efdfd9ebf
   - enabled: 1
     path: Assets/Scenes/Fall.unity
     guid: 424070e4f123b4f75b29c7f62eff5cbb
