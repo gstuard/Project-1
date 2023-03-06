@@ -441,10 +441,10 @@ public class Bird : MonoBehaviour
             Debug.Log(original_speed);
             Debug.Log(flying);
         }
-        //if (speed < original_speed)
-        //{
-        //    speed = original_speed; // this removes slowness...
-        //}
+        if (speed < original_speed)
+        {
+            speed = original_speed; // this removes slowness...
+        }
 
         if (move_lock > 0)
         {
