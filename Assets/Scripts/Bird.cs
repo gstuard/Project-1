@@ -254,10 +254,12 @@ public class Bird : MonoBehaviour
             {
                 if (Input.GetKey(KeyCode.LeftArrow))
                 {
+                    sr.flipX = true;
                     rb.velocity = new Vector2(-speed * 0.8f, rb.velocity.y);
                 }
                 if (Input.GetKey(KeyCode.RightArrow))
                 {
+                    sr.flipX = false;
                     rb.velocity = new Vector2(speed * 0.8f, rb.velocity.y);
                 }
                 if (!Input.GetKey(KeyCode.LeftArrow) && !Input.GetKey(KeyCode.RightArrow))
@@ -278,10 +280,12 @@ public class Bird : MonoBehaviour
             {
                 if (Input.GetKey(KeyCode.LeftArrow))
                 {
+                    sr.flipX = true;
                     rb.velocity = new Vector2(rb.velocity.x - Time.deltaTime * friction, rb.velocity.y);
                 }
                 if (Input.GetKey(KeyCode.RightArrow))
                 {
+                    sr.flipX = false;
                     rb.velocity = new Vector2(rb.velocity.x + Time.deltaTime * friction, rb.velocity.y);
                 }
             }
@@ -311,6 +315,7 @@ public class Bird : MonoBehaviour
             speed = original_speed;
             if (Input.GetKey(KeyCode.RightArrow))
             {
+                sr.flipX = true;
                 fall_speed = 2f;
             }
         }
@@ -319,6 +324,7 @@ public class Bird : MonoBehaviour
             speed = original_speed;
             if (Input.GetKey(KeyCode.LeftArrow))
             {
+                sr.flipX = false;
                 fall_speed = 2f;
             }
         }
@@ -349,11 +355,13 @@ public class Bird : MonoBehaviour
         {
             if (Input.GetKey(KeyCode.LeftArrow))
             {
+                sr.flipX = true;
                 float x_vel = Mathf.Max(-speed, rb.velocity.x - Time.deltaTime * air_friction);
                 rb.velocity = new Vector2(x_vel, rb.velocity.y);
             }
             if (Input.GetKey(KeyCode.RightArrow))
             {
+                sr.flipX = false;
                 float x_vel = Mathf.Min(speed, rb.velocity.x + Time.deltaTime * air_friction);
                 rb.velocity = new Vector2(x_vel, rb.velocity.y);
             }
@@ -372,7 +380,7 @@ public class Bird : MonoBehaviour
         flying = true;
         rb.gravityScale = 0f;
         speed = original_speed * 1.525f;
-        sr.color = Color.red;
+        //sr.color = Color.red;
 
         Vector2 input_vector = GetInputVector();
         if (input_vector != Vector2.zero)
@@ -423,7 +431,7 @@ public class Bird : MonoBehaviour
     public void Respawn()
     {
         move_lock = 0.95f;
-        sr.color = Color.clear;
+        //sr.color = Color.clear;
         // bird does death animation here, next line would have to change, use a coroutine?
         transform.position = respawn;
         rb.velocity = Vector2.zero;
@@ -466,7 +474,7 @@ public class Bird : MonoBehaviour
         }
         else if (!flying)
         {
-            sr.color = Color.blue;
+            //sr.color = Color.blue;
         }
 
         if (in_freeze_zone)
