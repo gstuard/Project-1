@@ -41,6 +41,7 @@ public class Bird : MonoBehaviour
     public AudioClip clip;
     private AudioSource source;
     public GameObject maincamera;
+    public Animator animator;
 
     // Start is called before the first frame update
     void Start()
@@ -56,6 +57,8 @@ public class Bird : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         flying = false; // end flight, add if statement to this for crystals soon probably
+        animator.SetBool("IsFlying", false);
+
 
         if (collision.gameObject.CompareTag("Respawn")) // should we be using area effector?
         {
@@ -147,6 +150,7 @@ public class Bird : MonoBehaviour
             speed *= 1.5f; 
 
             flying = false;
+            animator.SetBool("IsFlying", false);
             flight_timer = 1f;
         }
         else if (jump_height > rb.velocity.y)
@@ -179,6 +183,7 @@ public class Bird : MonoBehaviour
             if (flying)
             {
                 flying = false;
+                animator.SetBool("IsFlying", false);
                 rb.velocity = new Vector2(rb.velocity.x, Mathf.Max(0, rb.velocity.y) / 2 + jump_heights[jump_index]);
                 if (jump_heights[jump_index] < Mathf.Max(0, rb.velocity.y) / 2)
                 {
@@ -378,6 +383,7 @@ public class Bird : MonoBehaviour
     void Fly()
     {
         flying = true;
+        animator.SetBool("IsFlying", true);
         rb.gravityScale = 0f;
         speed = original_speed * 1.525f;
         //sr.color = Color.red;
@@ -423,6 +429,8 @@ public class Bird : MonoBehaviour
             if (flight_timer <= 0)
             {
                 flying = false;
+                animator.SetBool("IsFlying", false);
+
             }
         }
     }
@@ -507,6 +515,7 @@ public class Bird : MonoBehaviour
             AirMove();
         }
     }
+
 }
 
 
