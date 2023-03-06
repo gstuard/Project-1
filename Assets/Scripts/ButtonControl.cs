@@ -5,6 +5,9 @@ using UnityEngine.SceneManagement;
 
 public class ButtonControl : MonoBehaviour
 {
+
+    [SerializeField] GameObject pauseMenu;
+
     public void PlayGame()
     {
         SceneManager.LoadScene("Spring");
@@ -33,5 +36,22 @@ public class ButtonControl : MonoBehaviour
     public void LevelSelect()
     {
         SceneManager.LoadScene("LevelSelectMenu");
+    }
+
+    public void Pause()
+    {
+        pauseMenu.SetActive(true);
+        Time.timeScale = 0f;
+    }
+
+    public void Resume()
+    {
+        pauseMenu.SetActive(false);
+        Time.timeScale = 1f;
+    }
+
+    public void Exit()
+    {
+        SceneManager.LoadScene("MainMenu");
     }
 }

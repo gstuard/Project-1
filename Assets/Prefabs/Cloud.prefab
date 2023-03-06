@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 6980635624267414103}
   - component: {fileID: 247609328759590579}
   m_Layer: 0
-  m_Name: Leaf
+  m_Name: Cloud
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
