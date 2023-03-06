@@ -6,12 +6,15 @@ using UnityEngine.SceneManagement;
 public class ButtonControl : MonoBehaviour
 {
 
-    [SerializeField] GameObject pauseMenu;
+    public GameObject pause;
+    public GameObject play;
+    public GameObject home;
 
 
     //private void Start()
     //{
-    //    pauseMenu.SetActive(false);
+    //    play.SetActive(false);
+    //    home.SetActive(false);
     //}
 
     public void PlayGame()
@@ -46,14 +49,18 @@ public class ButtonControl : MonoBehaviour
 
     public void Pause()
     {
-        pauseMenu.SetActive(true);
+        play.SetActive(true);
+        home.SetActive(true);
+        pause.SetActive(false);
         Debug.Log("Pause button clicked");
         Time.timeScale = 0f;
     }
 
     public void Resume()
     {
-        pauseMenu.SetActive(false);
+        pause.SetActive(true);
+        play.SetActive(false);
+        home.SetActive(false);
         Time.timeScale = 1f;
     }
 
