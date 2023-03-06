@@ -37,10 +37,6 @@ public class Wind : MonoBehaviour
         }
     }
 
-
-
-    //alternative maybe better way below???
-
     //void OnTriggerStay2D(Collider2D other)
     //{
     //    Debug.Log("Object is in trigger");
