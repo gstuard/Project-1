@@ -17,7 +17,7 @@ public class CameraController : MonoBehaviour
     internal float tempMinY;
 
     internal int zoom = 0;
-    internal float original_size;
+    internal float original_size = 5;
 
     public int current_frame;
     public GameObject[] frames;
@@ -26,19 +26,18 @@ public class CameraController : MonoBehaviour
     void Start()
     {
         ToFrame(current_frame);
-        original_size = Camera.current.orthographicSize;
     }
 
 
     void ZoomOut()
     {
-        Camera.current.orthographicSize += Time.deltaTime;
+        Camera.current.orthographicSize += Time.deltaTime * 2;
     }
 
 
     void ZoomIn()
     {
-        Camera.current.orthographicSize -= Time.deltaTime;
+        Camera.current.orthographicSize -= Time.deltaTime * 2;
         Camera.current.orthographicSize = Mathf.Max(original_size, Camera.current.orthographicSize);
     }
 
