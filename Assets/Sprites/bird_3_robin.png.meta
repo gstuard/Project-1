@@ -47,7 +47,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 28
+  spritePixelsToUnits: 20
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -633,7 +633,7 @@ TextureImporter:
     nameFileIdTable:
       bird_3_robin_5: -785322272
       bird_3_robin_17: 1067284181
-      bird_3_robin_2: 471715753
+      bird_3_robin_10: -882920339
       bird_3_robin_7: -387198602
       bird_3_robin_1: 1410342001
       bird_3_robin_9: -351847955
@@ -653,8 +653,8 @@ TextureImporter:
       bird_3_robin_3: -919830526
       bird_3_robin_21: 724702768
       bird_3_robin_8: 202930886
+      bird_3_robin_2: 471715753
       bird_3_robin_4: 248641118
-      bird_3_robin_10: -882920339
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

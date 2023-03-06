@@ -17,7 +17,7 @@ public class RespawnCutscene : MonoBehaviour
     public void StartCutscene()
     {
         stop_at = bird.transform.position.y + 30;
-        transform.position = new Vector3(bird.transform.position.x, bird.transform.position.y - 10, 10);
+        transform.position = new Vector3(bird.transform.position.x, bird.transform.position.y - 18, 10);
     }
 
     // Update is called once per frame

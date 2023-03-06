@@ -47,53 +47,72 @@ public class Frame : MonoBehaviour
     }
 
 
+    void HitboxBoundary()
+    {
+        RaycastHit2D below_screen = Physics2D.Raycast(hitbox_origin, hitbox_direction, hitbox_length, birdlayer);
+        Debug.DrawRay(hitbox_origin, hitbox_direction * hitbox_length, Color.red);
+        if (below_screen.collider != null)
+        {
+            RestartLevel();
+            bird.GetComponent<Bird>().Respawn();
+        }
+    }
+
+
+    void CheckBoundaries()
+    {
+        if (direction_to_next_frame.x > 0)
+        {
+            if (bird.transform.position.x > frameMaxX)
+            {
+                cameracontroller.GetComponent<CameraController>().ToFrame(frame_index + 1);
+            }
+            else
+            {
+                cameracontroller.GetComponent<CameraController>().ToFrame(frame_index);
+            }
+        }
+        else if (direction_to_next_frame.x < 0)
+        {
+            if (bird.transform.position.x < frameMinX)
+            {
+                cameracontroller.GetComponent<CameraController>().ToFrame(frame_index + 1);
+            }
+            else cameracontroller.GetComponent<CameraController>().ToFrame(frame_index);
+        }
+
+        else if (direction_to_next_frame.y > 0)
+        {
+            if (bird.transform.position.y > frameMaxY)
+            {
+                cameracontroller.GetComponent<CameraController>().ToFrame(frame_index + 1);
+            }
+            else cameracontroller.GetComponent<CameraController>().ToFrame(frame_index);
+        }
+        else if (direction_to_next_frame.y < 0)
+        {
+            if (bird.transform.position.y < frameMinY)
+            {
+                cameracontroller.GetComponent<CameraController>().ToFrame(frame_index + 1);
+            }
+            else cameracontroller.GetComponent<CameraController>().ToFrame(frame_index);
+        }
+        else Debug.LogError("Variable direction_to_next_frame (Vector2) is empty, so camera does not know which frame to point at.");
+    }
+
+
     // Update is called once per frame
     void Update()
     {
         if (cameracontroller.GetComponent<CameraController>().current_frame == frame_index)
         {
-            RaycastHit2D below_screen = Physics2D.Raycast(hitbox_origin, hitbox_direction, hitbox_length, birdlayer);
-            Debug.DrawRay(hitbox_origin, hitbox_direction * hitbox_length, Color.red);
-            if (below_screen.collider != null)
-            {
-                RestartLevel();
-                bird.GetComponent<Bird>().Respawn();
-            }
+            HitboxBoundary();
 
-            if (direction_to_next_frame.x > 0)
-            {
-                if (bird.transform.position.x > frameMaxX)
-                {
-                    cameracontroller.GetComponent<CameraController>().ToFrame(frame_index + 1);
-                }
-                else cameracontroller.GetComponent<CameraController>().ToFrame(frame_index);
-            }
-            else if (direction_to_next_frame.x < 0)
-            {
-                if (bird.transform.position.x < frameMinX)
-                {
-                    cameracontroller.GetComponent<CameraController>().ToFrame(frame_index + 1);
-                }
-                else cameracontroller.GetComponent<CameraController>().ToFrame(frame_index);
-            }
-
-            else if (direction_to_next_frame.y > 0)
-            {
-                if (bird.transform.position.y > frameMaxY)
-                {
-                    cameracontroller.GetComponent<CameraController>().ToFrame(frame_index + 1);
-                }
-                else cameracontroller.GetComponent<CameraController>().ToFrame(frame_index);
-            }
-            else if (direction_to_next_frame.y < 0)
-            {
-                if (bird.transform.position.y < frameMinY)
-                {
-                    cameracontroller.GetComponent<CameraController>().ToFrame(frame_index + 1);
-                }
-                else cameracontroller.GetComponent<CameraController>().ToFrame(frame_index);
-            }
-            else Debug.LogError("Variable direction_to_next_frame (Vector2) is empty, so camera does not know which frame to point at.");
+            CheckBoundaries();
+        }
+        if (cameracontroller.GetComponent<CameraController>().current_frame == frame_index + 1)
+        {
+            CheckBoundaries();
         }
     }
 }
