@@ -9,10 +9,10 @@ public class ButtonControl : MonoBehaviour
     [SerializeField] GameObject pauseMenu;
 
 
-    private void Start()
-    {
-        pauseMenu.SetActive(false);
-    }
+    //private void Start()
+    //{
+    //    pauseMenu.SetActive(false);
+    //}
 
     public void PlayGame()
     {
