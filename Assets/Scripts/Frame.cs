@@ -4,30 +4,26 @@ using UnityEngine;
 
 public class Frame : MonoBehaviour
 {
+    public GameObject cameracontroller;
     public GameObject bird;
     public LayerMask birdlayer;
 
+    public int frame_index;
     public float frameMaxX;
     public float frameMaxY;
     public float frameMinX;
     public float frameMinY;
-
-    public Vector2 end_ray_origin;
-    public Vector2 end_ray_direction;
-    public float end_ray_length;
-    public int frame_index;
-
-    public GameObject cameracontroller;
+    public Vector2 direction_to_next_frame;
 
     public Vector2 hitbox_origin;
     public Vector2 hitbox_direction;
-    public float hitbox_length; 
+    public float hitbox_length;
 
 
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
 
@@ -46,25 +42,50 @@ public class Frame : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        RaycastHit2D below_screen = Physics2D.Raycast(hitbox_origin, hitbox_direction, hitbox_length, birdlayer);
-        Debug.DrawRay(hitbox_origin, hitbox_direction * hitbox_length, Color.red);
-        if (below_screen.collider != null)
+        if (cameracontroller.GetComponent<CameraController>().current_frame == frame_index)
         {
-            RestartLevel();
-            bird.GetComponent<Bird>().Respawn();
-        }
-
-        RaycastHit2D end_ray = Physics2D.Raycast(end_ray_origin, end_ray_direction, end_ray_length, birdlayer);
-        Debug.DrawRay(end_ray_origin, end_ray_direction * end_ray_length, Color.green);
-        if (end_ray.collider != null)
-        {
-            if (end_ray.collider.CompareTag("Player")) {
-                if (bird.transform.position.x < frameMaxX && bird.transform.position.y < frameMaxY)
-                {
-                    cameracontroller.GetComponent<CameraController>().ToFrame(frame_index);
-                }
-                else cameracontroller.GetComponent<CameraController>().ToFrame(frame_index + 1);
+            RaycastHit2D below_screen = Physics2D.Raycast(hitbox_origin, hitbox_direction, hitbox_length, birdlayer);
+            Debug.DrawRay(hitbox_origin, hitbox_direction * hitbox_length, Color.red);
+            if (below_screen.collider != null)
+            {
+                RestartLevel();
+                bird.GetComponent<Bird>().Respawn();
             }
+
+            if (direction_to_next_frame.x > 0)
+            {
+                if (bird.transform.position.x > frameMaxX)
+                {
+                    cameracontroller.GetComponent<CameraController>().ToFrame(frame_index + 1);
+                }
+                else cameracontroller.GetComponent<CameraController>().ToFrame(frame_index);
+            }
+            else if (direction_to_next_frame.x < 0)
+            {
+                if (bird.transform.position.x < frameMinX)
+                {
+                    cameracontroller.GetComponent<CameraController>().ToFrame(frame_index + 1);
+                }
+                else cameracontroller.GetComponent<CameraController>().ToFrame(frame_index);
+            }
+
+            else if (direction_to_next_frame.y > 0)
+            {
+                if (bird.transform.position.y > frameMaxY)
+                {
+                    cameracontroller.GetComponent<CameraController>().ToFrame(frame_index + 1);
+                }
+                else cameracontroller.GetComponent<CameraController>().ToFrame(frame_index);
+            }
+            else if (direction_to_next_frame.y < 0)
+            {
+                if (bird.transform.position.y < frameMinY)
+                {
+                    cameracontroller.GetComponent<CameraController>().ToFrame(frame_index + 1);
+                }
+                else cameracontroller.GetComponent<CameraController>().ToFrame(frame_index);
+            }
+            else Debug.LogError("Variable direction_to_next_frame (Vector2) is empty, so camera does not know which frame to point at.");
         }
     }
 }
