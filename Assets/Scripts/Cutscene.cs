@@ -7,6 +7,7 @@ public class Cutscene : MonoBehaviour
 
     public GameObject bird;
     public GameObject maincamera;
+    public int frame_index;
 
     public float cutscene_trigger_x;
 
@@ -15,7 +16,7 @@ public class Cutscene : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (bird.transform.position.x > cutscene_trigger_x)
+        if (bird.transform.position.x > cutscene_trigger_x && maincamera.GetComponent<CameraController>().current_frame == frame_index)
         {
             bird.GetComponent<Bird>().rb.velocity = Vector2.zero;
             bird.GetComponent<Bird>().SetMoveLock(1f);
